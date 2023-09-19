@@ -33,6 +33,14 @@ async def async_setup_entry(
     api: AndroidTVRemote = hass.data[DOMAIN][config_entry.entry_id]
     async_add_entities([AndroidTVRemoteMediaPlayerEntity(api, config_entry)])
 
+# Define a dictionary of application IDs and their names
+APP_ID_TO_NAME = {
+    "com.google.android.tvlauncher": "Home Screen",
+    "com.netflix.ninja": "Netflix",
+    "com.google.android.youtube.tv": "Youtube",
+    "com.showmax.app": "Showmax",
+    "com.disneyplus.mea": "Disney+",
+    # Add more entries as needed
 
 class AndroidTVRemoteMediaPlayerEntity(AndroidTVRemoteBaseEntity, MediaPlayerEntity):
     """Android TV Remote Media Player Entity."""
@@ -63,7 +71,7 @@ class AndroidTVRemoteMediaPlayerEntity(AndroidTVRemoteBaseEntity, MediaPlayerEnt
     def _update_current_app(self, current_app: str) -> None:
         """Update current app info."""
         self._attr_app_id = current_app
-        self._attr_app_name = current_app
+        self._attr_app_name = APP_ID_TO_NAME.get(current_app, current_app)
 
     def _update_volume_info(self, volume_info: dict[str, str | bool]) -> None:
         """Update volume info."""
